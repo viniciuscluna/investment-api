@@ -1,5 +1,5 @@
 ﻿using Investment.App.Api.Models;
-using Investment.App.Api.ViewModels.Customer;
+using Investment.App.Api.ViewModels.Customer.Operation;
 
 namespace Investment.App.Api;
 

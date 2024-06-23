@@ -1,7 +1,8 @@
 ﻿using Investment.App.Api.Services;
-using Investment.App.Api.ViewModels.Customer;
+using Investment.App.Api.ViewModels.Customer.Operation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.OutputCaching;
 
 namespace Investment.App.Api.Controllers;
 
@@ -12,13 +13,14 @@ public class UserController(IFinancialProductService _financialProductService, I
 {
 
     [HttpGet]
+    [OutputCache(Duration = 10)]
     public async Task<IActionResult> Get(){
         return Ok(await _positionService.GetAsync());
     }
 
     [HttpGet("products")]
     public async Task<IActionResult> GetProducts(){
-        return Ok(await _financialProductService.GetAllAsync());
+        return Ok(await _financialProductService.GetAllAvailableAsync());
     }
 
     [HttpPost("buy")]

@@ -1,6 +1,8 @@
-﻿namespace Investment.App.Api.Services;
+﻿using Investment.App.Api.ViewModels.Customer.Position;
+
+namespace Investment.App.Api.Services;
 
 public interface IPositionService
 {
-    Task<InvestmentPositionResponseViewModel[]> GetAsync();
+    Task<PositionResponseViewModel> GetAsync();
 }

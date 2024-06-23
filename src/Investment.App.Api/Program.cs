@@ -2,6 +2,7 @@ using System.Text;
 using Investment.App.Api.Exceptions;
 using Investment.App.Api.Extensions;
 using Investment.App.Api.Infrastructure.Context;
+using Investment.App.Api.Workers;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -14,7 +15,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "apiagenda", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "XP - Investment API", Version = "v1" });
 
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme() 
                 { 
@@ -43,13 +44,15 @@ builder.Services.AddSwaggerGen(c =>
 
 builder.Services.AddControllers();
 
-builder.Services.AddMemoryCache();
+builder.Services.AddOutputCache();
 
 builder.Services.AddDbContext<InvestmentDbContext>(options =>
             options.UseNpgsql(builder.Configuration.GetConnectionString("InvestmentContext")));
 
 builder.Services.AddRepositories();
 builder.Services.AddServices();
+
+builder.Services.AddHostedService<TimedInvestmentHostedService>();
 
 builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
 
@@ -82,6 +85,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseOutputCache();
 app.UseHttpsRedirection();
 
 app.UseAuthentication();

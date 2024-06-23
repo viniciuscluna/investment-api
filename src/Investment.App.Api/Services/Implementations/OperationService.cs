@@ -2,7 +2,7 @@
 using Investment.App.Api.Entities;
 using Investment.App.Api.Infrastructure.Repositories;
 using Investment.App.Api.Models;
-using Investment.App.Api.ViewModels.Customer;
+using Investment.App.Api.ViewModels.Customer.Operation;
 
 namespace Investment.App.Api;
 

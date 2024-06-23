@@ -1,41 +1,28 @@
 ﻿
-using Microsoft.Extensions.Caching.Memory;
+using Investment.App.Api.ViewModels.Customer.Position;
 
 namespace Investment.App.Api.Services;
 
-public class PositionService(ICustomerRepository _customerRepository, IMemoryCache _memoryCache) : IPositionService
+public class PositionService(ICustomerRepository _customerRepository) : IPositionService
 {
-    public async Task<InvestmentPositionResponseViewModel[]> GetAsync()
+    public async Task<PositionResponseViewModel> GetAsync()
     {
-        const string customerKey = "INVESTMENT_KEY";
-
-        if (_memoryCache.TryGetValue(customerKey, out InvestmentPositionResponseViewModel[] memory))
-        {
-            return memory;
-        }
-
         var customer = await _customerRepository.GetCustomerAsync();
 
-        var result = customer.Investments.Select(s => new InvestmentPositionResponseViewModel()
+        return new()
         {
-            Investment = s.FinancialProduct?.Name ?? string.Empty,
-            Amount = s.UpdatedPurchaseAmount,
-            Updates = s.Operations.Select(s2 => new InvestmentPositionDetailResponseViewModel
+            AvailableAmount = customer.AvailableAmount,
+            Investments = customer.Investments.Select(s => new PositionInvestmentResponseViewModel()
             {
-                Amount = s2.Amount,
-                Operation = s2.Type,
-                TimeStamp = s2.TimeStamp
+                Investment = s.FinancialProduct?.Name ?? string.Empty,
+                Amount = s.UpdatedPurchaseAmount,
+                Updates = s.Operations.Select(s2 => new PositionInvestmentDetailResponseViewModel
+                {
+                    Amount = s2.Amount,
+                    Operation = s2.Type,
+                    TimeStamp = s2.TimeStamp
+                }).ToArray()
             }).ToArray()
-        }).ToArray();
-
-        _memoryCache.GetOrCreate(customerKey, entry =>
-           {
-               entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5);
-               entry.SetPriority(CacheItemPriority.High);
-
-               return result;
-           });
-
-        return result;
+        };
     }
 }
