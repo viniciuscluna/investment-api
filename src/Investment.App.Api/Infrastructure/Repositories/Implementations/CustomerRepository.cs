@@ -18,8 +18,13 @@ public class CustomerRepository: GenericRepository<Customer>, ICustomerRepositor
     /// For now, this method only returns the first customer ocorrence on database due to missing identity provider
     /// </summary>
     /// <returns>the first customer</returns>
-    public async Task<Customer> GetCustomer()
+    public async Task<Customer> GetCustomerAsync()
     {
-        return await _context.Customers.Include(i => i.Investments).ThenInclude(i => i.Operations).FirstAsync();
+        return await _context.Customers
+        .Include(i => i.Investments)
+            .ThenInclude(i => i.Operations)
+        .Include(i => i.Investments)
+            .ThenInclude(i => i.FinancialProduct)
+            .FirstAsync();
     }
 }

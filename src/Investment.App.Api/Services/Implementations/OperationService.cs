@@ -10,7 +10,7 @@ public class OperationService(ICustomerRepository _customerRepository, IFinancia
 {
     public async Task<OperationResult> BuyAsync(BuyRequestViewModel request)
     {
-        var customer = await _customerRepository.GetCustomer();
+        var customer = await _customerRepository.GetCustomerAsync();
         var financialProduct = await _financialProductRepository.GetByIdAsync(request.FinancialProductId);
 
         if (request.Amount > customer.AvailableAmount) return new() { IsValid = false, Message = "Not enough amount to buy" };
@@ -57,7 +57,7 @@ public class OperationService(ICustomerRepository _customerRepository, IFinancia
 
     public async Task<OperationResult> SellAsync(SellRequestViewModel request)
     {
-        var customer = await _customerRepository.GetCustomer();
+        var customer = await _customerRepository.GetCustomerAsync();
 
         if (!customer.Investments.Any(a => a.FinancialProductId == request.FinancialProductId)) return new() { IsValid = false, Message = "Your investment was not found" };
 

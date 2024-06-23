@@ -9,6 +9,7 @@ public static class DIExtensions
         services.AddSingleton<ILoginService, LoginService>();
         services.AddScoped<IFinancialProductService, FinancialProductService>();
         services.AddScoped<IOperationService, OperationService>();
+        services.AddScoped<IPositionService, PositionService>();
     }
     public static void AddRepositories(this IServiceCollection services){
         services.AddScoped<IFinancialProductRepository, FinancialProductRepository>();

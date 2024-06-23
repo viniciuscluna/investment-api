@@ -5,5 +5,5 @@ namespace Investment.App.Api;
 
 public interface ICustomerRepository  : IGenericRepository<Customer>
 {
-    Task<Customer> GetCustomer();
+    Task<Customer> GetCustomerAsync();
 }

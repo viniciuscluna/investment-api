@@ -8,8 +8,14 @@ namespace Investment.App.Api.Controllers;
 [Route("api/[controller]")]
 [ApiController]
 [Authorize(Roles = "User")]
-public class UserController(IFinancialProductService _financialProductService, IOperationService _operationService) : ControllerBase
+public class UserController(IFinancialProductService _financialProductService, IOperationService _operationService, IPositionService _positionService) : ControllerBase
 {
+
+    [HttpGet]
+    public async Task<IActionResult> Get(){
+        return Ok(await _positionService.GetAsync());
+    }
+
     [HttpGet("products")]
     public async Task<IActionResult> GetProducts(){
         return Ok(await _financialProductService.GetAllAsync());

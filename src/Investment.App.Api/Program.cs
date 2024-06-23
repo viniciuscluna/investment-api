@@ -43,6 +43,8 @@ builder.Services.AddSwaggerGen(c =>
 
 builder.Services.AddControllers();
 
+builder.Services.AddMemoryCache();
+
 builder.Services.AddDbContext<InvestmentDbContext>(options =>
             options.UseNpgsql(builder.Configuration.GetConnectionString("InvestmentContext")));
 
