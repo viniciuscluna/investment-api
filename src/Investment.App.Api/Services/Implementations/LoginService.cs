@@ -3,10 +3,9 @@ using System.Security.Claims;
 using System.Text;
 using Investment.App.Api.Exceptions;
 using Investment.App.Api.Models;
-using Investment.App.Api.Services.Interfaces;
 using Microsoft.IdentityModel.Tokens;
 
-namespace Investment.App.Api.Services.Implementations;
+namespace Investment.App.Api.Services;
 
 public class LoginService : ILoginService
 {

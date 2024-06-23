@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Investment.App.Api.Infrastructure.Context;
 
-public class InvestmentContext : DbContext
+public class InvestmentDbContext : DbContext
 {
-    public InvestmentContext(DbContextOptions<InvestmentContext> options) : base(options)
+    public InvestmentDbContext(DbContextOptions<InvestmentDbContext> options) : base(options)
     {
     }
 

@@ -1,6 +1,6 @@
 ﻿using Investment.App.Api.Models;
 
-namespace Investment.App.Api.Services.Interfaces;
+namespace Investment.App.Api.Services;
 
 public interface ILoginService
 {

@@ -11,7 +11,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace Investment.App.Api.Infrastructure.Migrations
 {
-    [DbContext(typeof(InvestmentContext))]
+    [DbContext(typeof(InvestmentDbContext))]
     [Migration("20240623025206_InitialCreate")]
     partial class InitialCreate
     {

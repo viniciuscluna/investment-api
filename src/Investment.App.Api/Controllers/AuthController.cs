@@ -1,8 +1,10 @@
-using Investment.App.Api.Services.Interfaces;
+using Investment.App.Api.Services;
+using Investment.App.Api.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Investment.App.Api;
+namespace Investment.App.Api.Controllers;
 
+[ApiController]
 [Route("api/[controller]")]
 public class AuthController(ILoginService _loginService) : ControllerBase {
     

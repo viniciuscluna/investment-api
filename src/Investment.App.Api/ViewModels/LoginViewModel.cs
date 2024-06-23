@@ -1,4 +1,4 @@
-﻿namespace Investment.App.Api;
+﻿namespace Investment.App.Api.ViewModels;
 
 public class LoginViewModel
 {
