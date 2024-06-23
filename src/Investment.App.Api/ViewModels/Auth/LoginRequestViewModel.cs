@@ -1,6 +1,6 @@
-﻿namespace Investment.App.Api.ViewModels;
+﻿namespace Investment.App.Api.ViewModels.Login;
 
-public class LoginViewModel
+public class LoginRequestViewModel
 {
     public required string Login { get; set; }
     public required string Password { get; set; }

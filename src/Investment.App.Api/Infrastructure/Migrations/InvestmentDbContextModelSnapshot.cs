@@ -11,7 +11,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Investment.App.Api.Infrastructure.Migrations
 {
     [DbContext(typeof(InvestmentDbContext))]
-    partial class InvestmentContextModelSnapshot : ModelSnapshot
+    partial class InvestmentDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
@@ -22,10 +22,39 @@ namespace Investment.App.Api.Infrastructure.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("Investment.App.Api.Entities.Customer", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<decimal>("AvailableAmount")
+                        .HasColumnType("numeric");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Customers");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("92a5f228-e11f-4223-9726-9487cf95ab6f"),
+                            AvailableAmount = 5000m,
+                            Name = "User 1"
+                        });
+                });
+
             modelBuilder.Entity("Investment.App.Api.Entities.CustomerInvestment", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("CustomerId")
                         .HasColumnType("uuid");
 
                     b.Property<Guid>("FinancialProductId")
@@ -38,6 +67,8 @@ namespace Investment.App.Api.Infrastructure.Migrations
                         .HasColumnType("numeric");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CustomerId");
 
                     b.HasIndex("FinancialProductId");
 
@@ -110,46 +141,54 @@ namespace Investment.App.Api.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("e90ec31a-2474-4116-bc26-6a702b450b85"),
+                            Id = new Guid("251c9c19-0053-447a-bb64-06c5926a99d9"),
                             Description = "CDB Loren Ipsun",
                             Enabled = true,
-                            Expires = new DateTime(2024, 11, 23, 2, 52, 6, 20, DateTimeKind.Utc).AddTicks(2458),
+                            Expires = new DateTime(2024, 11, 23, 4, 24, 15, 370, DateTimeKind.Utc).AddTicks(392),
                             MininumInvestment = 50m,
                             Name = "CDB",
                             RiskLevel = 5,
-                            TimeStamp = new DateTime(2024, 6, 23, 2, 52, 6, 20, DateTimeKind.Utc).AddTicks(2468)
+                            TimeStamp = new DateTime(2024, 6, 23, 4, 24, 15, 370, DateTimeKind.Utc).AddTicks(400)
                         },
                         new
                         {
-                            Id = new Guid("5314c8d1-77f8-4650-b60d-e759b8a082ab"),
+                            Id = new Guid("ad8dbd67-1d38-4503-8f8f-3a4c82d52aad"),
                             Description = "LCI Loren Ipsun",
                             Enabled = true,
-                            Expires = new DateTime(2024, 12, 23, 2, 52, 6, 20, DateTimeKind.Utc).AddTicks(2471),
+                            Expires = new DateTime(2024, 12, 23, 4, 24, 15, 370, DateTimeKind.Utc).AddTicks(404),
                             MininumInvestment = 500m,
                             Name = "LCI",
                             RiskLevel = 5,
-                            TimeStamp = new DateTime(2024, 6, 23, 2, 52, 6, 20, DateTimeKind.Utc).AddTicks(2472)
+                            TimeStamp = new DateTime(2024, 6, 23, 4, 24, 15, 370, DateTimeKind.Utc).AddTicks(405)
                         },
                         new
                         {
-                            Id = new Guid("03d1c4ed-160c-47e3-8519-de0e37fc2fd7"),
+                            Id = new Guid("0e59f5c6-81a1-459d-84bc-2f187f275379"),
                             Description = "LCA Loren Ipsun",
                             Enabled = true,
-                            Expires = new DateTime(2024, 6, 29, 2, 52, 6, 20, DateTimeKind.Utc).AddTicks(2623),
+                            Expires = new DateTime(2024, 6, 29, 4, 24, 15, 370, DateTimeKind.Utc).AddTicks(408),
                             MininumInvestment = 1000m,
                             Name = "LCA",
                             RiskLevel = 5,
-                            TimeStamp = new DateTime(2024, 6, 23, 2, 52, 6, 20, DateTimeKind.Utc).AddTicks(2639)
+                            TimeStamp = new DateTime(2024, 6, 23, 4, 24, 15, 370, DateTimeKind.Utc).AddTicks(428)
                         });
                 });
 
             modelBuilder.Entity("Investment.App.Api.Entities.CustomerInvestment", b =>
                 {
+                    b.HasOne("Investment.App.Api.Entities.Customer", "Customer")
+                        .WithMany("Investments")
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Investment.App.Api.Entities.FinancialProduct", "FinancialProduct")
                         .WithMany("Investments")
                         .HasForeignKey("FinancialProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Customer");
 
                     b.Navigation("FinancialProduct");
                 });
@@ -163,6 +202,11 @@ namespace Investment.App.Api.Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("CustomerInvestment");
+                });
+
+            modelBuilder.Entity("Investment.App.Api.Entities.Customer", b =>
+                {
+                    b.Navigation("Investments");
                 });
 
             modelBuilder.Entity("Investment.App.Api.Entities.CustomerInvestment", b =>

@@ -1,5 +1,5 @@
 using Investment.App.Api.Services;
-using Investment.App.Api.ViewModels;
+using Investment.App.Api.ViewModels.Login;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Investment.App.Api.Controllers;
@@ -9,7 +9,7 @@ namespace Investment.App.Api.Controllers;
 public class AuthController(ILoginService _loginService) : ControllerBase {
     
     [HttpPost]
-    public IActionResult Login(LoginViewModel vm){
+    public IActionResult Login(LoginRequestViewModel vm){
         return Ok(_loginService.Authenticate(vm.Login, vm.Password));
     }
 }

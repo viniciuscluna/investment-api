@@ -14,6 +14,7 @@ public class CustomerInvestmentConfiguration : IEntityTypeConfiguration<Customer
         builder.Property(p => p.InitialPurchaseAmount).IsRequired();
         builder.Property(p => p.UpdatedPurchaseAmount).IsRequired();
         builder.Property(p => p.FinancialProductId).IsRequired();
+        builder.Property(p => p.CustomerId).IsRequired();
 
         builder.HasMany(o => o.Operations)
             .WithOne(o => o.CustomerInvestment)

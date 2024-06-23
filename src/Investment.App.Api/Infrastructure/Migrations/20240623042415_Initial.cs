@@ -8,11 +8,24 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Investment.App.Api.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "Customers",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    AvailableAmount = table.Column<decimal>(type: "numeric", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Customers", x => x.Id);
+                });
+
             migrationBuilder.CreateTable(
                 name: "FinancialProducts",
                 columns: table => new
@@ -37,12 +50,19 @@ namespace Investment.App.Api.Infrastructure.Migrations
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     FinancialProductId = table.Column<Guid>(type: "uuid", nullable: false),
+                    CustomerId = table.Column<Guid>(type: "uuid", nullable: false),
                     InitialPurchaseAmount = table.Column<decimal>(type: "numeric", nullable: false),
                     UpdatedPurchaseAmount = table.Column<decimal>(type: "numeric", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_CustomerInvestments", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_CustomerInvestments_Customers_CustomerId",
+                        column: x => x.CustomerId,
+                        principalTable: "Customers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_CustomerInvestments_FinancialProducts_FinancialProductId",
                         column: x => x.FinancialProductId,
@@ -73,19 +93,29 @@ namespace Investment.App.Api.Infrastructure.Migrations
                 });
 
             migrationBuilder.InsertData(
+                table: "Customers",
+                columns: new[] { "Id", "AvailableAmount", "Name" },
+                values: new object[] { new Guid("92a5f228-e11f-4223-9726-9487cf95ab6f"), 5000m, "User 1" });
+
+            migrationBuilder.InsertData(
                 table: "FinancialProducts",
                 columns: new[] { "Id", "Description", "Enabled", "Expires", "MininumInvestment", "Name", "RiskLevel", "TimeStamp" },
                 values: new object[,]
                 {
-                    { new Guid("03d1c4ed-160c-47e3-8519-de0e37fc2fd7"), "LCA Loren Ipsun", true, new DateTime(2024, 6, 29, 2, 52, 6, 20, DateTimeKind.Utc).AddTicks(2623), 1000m, "LCA", 5, new DateTime(2024, 6, 23, 2, 52, 6, 20, DateTimeKind.Utc).AddTicks(2639) },
-                    { new Guid("5314c8d1-77f8-4650-b60d-e759b8a082ab"), "LCI Loren Ipsun", true, new DateTime(2024, 12, 23, 2, 52, 6, 20, DateTimeKind.Utc).AddTicks(2471), 500m, "LCI", 5, new DateTime(2024, 6, 23, 2, 52, 6, 20, DateTimeKind.Utc).AddTicks(2472) },
-                    { new Guid("e90ec31a-2474-4116-bc26-6a702b450b85"), "CDB Loren Ipsun", true, new DateTime(2024, 11, 23, 2, 52, 6, 20, DateTimeKind.Utc).AddTicks(2458), 50m, "CDB", 5, new DateTime(2024, 6, 23, 2, 52, 6, 20, DateTimeKind.Utc).AddTicks(2468) }
+                    { new Guid("0e59f5c6-81a1-459d-84bc-2f187f275379"), "LCA Loren Ipsun", true, new DateTime(2024, 6, 29, 4, 24, 15, 370, DateTimeKind.Utc).AddTicks(408), 1000m, "LCA", 5, new DateTime(2024, 6, 23, 4, 24, 15, 370, DateTimeKind.Utc).AddTicks(428) },
+                    { new Guid("251c9c19-0053-447a-bb64-06c5926a99d9"), "CDB Loren Ipsun", true, new DateTime(2024, 11, 23, 4, 24, 15, 370, DateTimeKind.Utc).AddTicks(392), 50m, "CDB", 5, new DateTime(2024, 6, 23, 4, 24, 15, 370, DateTimeKind.Utc).AddTicks(400) },
+                    { new Guid("ad8dbd67-1d38-4503-8f8f-3a4c82d52aad"), "LCI Loren Ipsun", true, new DateTime(2024, 12, 23, 4, 24, 15, 370, DateTimeKind.Utc).AddTicks(404), 500m, "LCI", 5, new DateTime(2024, 6, 23, 4, 24, 15, 370, DateTimeKind.Utc).AddTicks(405) }
                 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_CustomerInvestmentOperations_CustomerInvestmentId",
                 table: "CustomerInvestmentOperations",
                 column: "CustomerInvestmentId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CustomerInvestments_CustomerId",
+                table: "CustomerInvestments",
+                column: "CustomerId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_CustomerInvestments_FinancialProductId",
@@ -101,6 +131,9 @@ namespace Investment.App.Api.Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "CustomerInvestments");
+
+            migrationBuilder.DropTable(
+                name: "Customers");
 
             migrationBuilder.DropTable(
                 name: "FinancialProducts");
