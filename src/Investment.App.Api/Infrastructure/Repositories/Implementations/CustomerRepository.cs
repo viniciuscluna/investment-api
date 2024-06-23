@@ -20,6 +20,6 @@ public class CustomerRepository: GenericRepository<Customer>, ICustomerRepositor
     /// <returns>the first customer</returns>
     public async Task<Customer> GetCustomer()
     {
-        return await _context.Customers.FirstAsync();
+        return await _context.Customers.Include(i => i.Investments).ThenInclude(i => i.Operations).FirstAsync();
     }
 }

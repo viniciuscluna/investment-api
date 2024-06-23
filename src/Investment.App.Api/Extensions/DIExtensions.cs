@@ -13,6 +13,6 @@ public static class DIExtensions
     public static void AddRepositories(this IServiceCollection services){
         services.AddScoped<IFinancialProductRepository, FinancialProductRepository>();
         services.AddScoped<ICustomerRepository, CustomerRepository>();
-
+        services.AddScoped<ICustomerInvestmentRepository, CustomerInvestmentRepository>();
     }
 }
