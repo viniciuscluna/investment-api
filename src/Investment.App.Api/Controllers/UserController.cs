@@ -13,7 +13,7 @@ public class UserController(IFinancialProductService _financialProductService, I
 {
 
     [HttpGet]
-    [OutputCache(Duration = 10)]
+    [OutputCache(Duration = 10, PolicyName = "OutputCacheWithAuthPolicy")]
     public async Task<IActionResult> Get(){
         return Ok(await _positionService.GetAsync());
     }
